@@ -98,7 +98,7 @@
                 console.log(event.target);
                 let str = event.target.value;
                 str = str.replace(/\s+/g, ", ");
-                str = "masterpiece, best quality" + str;
+                str = "masterpiece, best quality, nipples" + str;
                 _copy(str);
             };
             previewImage[i].append(btn);
@@ -147,6 +147,41 @@
             flicker(btn);
         };
         elem.prepend(btn);
+
+        // handle thumb
+        let previewImage = document.querySelectorAll(".inner");
+        for (let i = 0; i < previewImage.length; i++) {
+            previewImage[i].style.position = "relative";
+            const image = previewImage[i].querySelector("a > img");
+            const title = image.getAttribute("title");
+            const btn = document.createElement("button");
+            btn.id = "Btn" + "index" + i;
+            btn.innerHTML = "标签" + i;
+            btn.value = title;
+            btn.style.width = "50px";
+            btn.style.height = "20px";
+            btn.style.lineHeight = "20px";
+            btn.style.position = "absolute";
+            btn.style.left = "50%";
+            btn.style.top = "1px";
+            btn.style.transform = "translateX(-50%)";
+            btn.style.fontSize = "10px";
+            btn.style.borderRadius = "12px";
+            btn.style.backgroundColor = "rgba(232, 122, 144, 0.8)";
+            btn.style.border = "none";
+            btn.style.boxShadow = "rgba(232, 122, 144, 0.8)";
+            btn.style.color = "rgb(255, 255, 255)";
+            btn.onclick = (event) => {
+                console.log(event.target);
+                let str = event.target.value;
+                let matchs = str.match(/(?<=Tags\:)([a-zA-Z0-9_\s]*)\s+(?=User)/g)[0];
+                str = matchs.replace(/\s+/g, ", ");
+                console.log("str :>> ", str);
+                str = "masterpiece, best quality, nipples" + str;
+                _copy(str);
+            };
+            previewImage[i].append(btn);
+        }
     };
     const sankaku = () => {
         let elem = document.querySelector("#tag-sidebar");
