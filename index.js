@@ -29,47 +29,85 @@
         }, 100);
     };
     const danbooru = () => {
-        let elem = document.querySelector("#tag-list");
-        let btn = drawButton();
-        btn.onclick = () => {
-            let tagList = document.querySelectorAll("a.search-tag");
-            let tags = [];
-            tagList.forEach((tag) => {
-                tags.push(tag.innerText);
-            });
-            navigator.clipboard.writeText(tags.join(", "));
-            flicker(btn);
-        };
-        elem.prepend(btn);
+        let elem = document.querySelector(".tag-list");
+        if (elem) {
+            let btn = drawButton();
+            btn.onclick = () => {
+                let tagList = document.querySelectorAll("a.search-tag");
+                let tags = [];
+                tagList.forEach((tag) => {
+                    tags.push(tag.innerText);
+                });
+                navigator.clipboard.writeText(tags.join(", "));
+                flicker(btn);
+            };
+            elem.prepend(btn);
+        }
+
+        // handle post-preview
+        let previewImage = document.querySelectorAll(".post-preview");
+        for (let i = 0; i < previewImage.length; i++) {
+            previewImage[i].style.position = "relative";
+            const image = previewImage[i].querySelector(".post-preview-image");
+            const title = image.getAttribute("title");
+            const btn = document.createElement("button");
+            btn.id = "Btn" + "index" + i;
+            btn.innerHTML = "标签" + i;
+            btn.value = title;
+            btn.style.width = "60px";
+            btn.style.height = "20px";
+            btn.style.lineHeight = "20px";
+            btn.style.position = "absolute";
+            btn.style.left = "50%";
+            btn.style.top = "-10px";
+            btn.style.transform = "translateX(-50%)";
+            btn.style.fontSize = "10px";
+            btn.style.borderRadius = "12px";
+            btn.style.backgroundColor = "rgba(232, 122, 144, 0.8)";
+            btn.style.border = "none";
+            btn.style.boxShadow = "rgba(232, 122, 144, 0.8)";
+            btn.style.color = "rgb(255, 255, 255)";
+            btn.onclick = (event) => {
+                console.log(event.target);
+                let str = event.target.value;
+                let matchs = str.match(/([a-zA-Z0-9_\s\(\)\,\，\-]*)\s+(?=rating)/g)[0];
+                str = matchs.replace(/\s+/g, ", ");
+                str = "masterpiece, best quality, nipples, " + str;
+                _copy(str);
+            };
+            previewImage[i].append(btn);
+        }
     };
     const gelbooru = () => {
         // handle tag
         let elem = document.querySelector(".tag-list");
-        let btn = drawButton();
-        btn.style.marginLeft = "13px";
-        const tagTypes = [
-            ".tag-type-artist",
-            ".tag-type-character",
-            ".tag-type-copyright",
-            ".tag-type-metadata",
-            ".tag-type-general",
-        ];
-        btn.onclick = () => {
-            let tags = [];
-            for (let i = 0; i < tagTypes.length; i++) {
-                const listItem = document.querySelectorAll(tagTypes[i]);
-                listItem.forEach((l) => {
-                    const tagList = l.querySelectorAll("a");
-                    tagList.forEach((tag) => {
-                        if (tag.innerText === "?") return;
-                        tags.push(tag.innerText);
+        if (elem) {
+            let btn = drawButton();
+            btn.style.marginLeft = "13px";
+            const tagTypes = [
+                ".tag-type-artist",
+                ".tag-type-character",
+                ".tag-type-copyright",
+                ".tag-type-metadata",
+                ".tag-type-general",
+            ];
+            btn.onclick = () => {
+                let tags = [];
+                for (let i = 0; i < tagTypes.length; i++) {
+                    const listItem = document.querySelectorAll(tagTypes[i]);
+                    listItem.forEach((l) => {
+                        const tagList = l.querySelectorAll("a");
+                        tagList.forEach((tag) => {
+                            if (tag.innerText === "?") return;
+                            tags.push(tag.innerText);
+                        });
                     });
-                });
-            }
-            navigator.clipboard.writeText(tags.join(", "));
-            flicker(btn);
-        };
-        elem.prepend(btn);
+                }
+                navigator.clipboard.writeText(tags.join(", "));
+                flicker(btn);
+            };
+            elem.prepend(btn);
+        }
 
         // handle thumbnail-preview
         let previewImage = document.querySelectorAll(".thumbnail-preview");
@@ -123,30 +161,32 @@
     };
     const yandere = () => {
         let elem = document.querySelector("#tag-sidebar");
-        let btn = drawButton();
-        btn.style.marginTop = "10px";
-        btn.style.marginBottom = "10px";
-        const tagTypes = [
-            ".tag-type-artist",
-            ".tag-type-character",
-            ".tag-type-copyright",
-            ".tag-type-metadata",
-            ".tag-type-general",
-        ];
-        btn.onclick = () => {
-            let tags = [];
-            for (let i = 0; i < tagTypes.length; i++) {
-                const listItem = document.querySelectorAll(tagTypes[i]);
-                listItem.forEach((l) => {
-                    const tagList = l.querySelectorAll("a");
-                    const tag = tagList[tagList.length - 1];
-                    tags.push(tag.innerText);
-                });
-            }
-            navigator.clipboard.writeText(tags.join(", "));
-            flicker(btn);
-        };
-        elem.prepend(btn);
+        if (elem) {
+            let btn = drawButton();
+            btn.style.marginTop = "10px";
+            btn.style.marginBottom = "10px";
+            const tagTypes = [
+                ".tag-type-artist",
+                ".tag-type-character",
+                ".tag-type-copyright",
+                ".tag-type-metadata",
+                ".tag-type-general",
+            ];
+            btn.onclick = () => {
+                let tags = [];
+                for (let i = 0; i < tagTypes.length; i++) {
+                    const listItem = document.querySelectorAll(tagTypes[i]);
+                    listItem.forEach((l) => {
+                        const tagList = l.querySelectorAll("a");
+                        const tag = tagList[tagList.length - 1];
+                        tags.push(tag.innerText);
+                    });
+                }
+                navigator.clipboard.writeText(tags.join(", "));
+                flicker(btn);
+            };
+            elem.prepend(btn);
+        }
 
         // handle thumb
         let previewImage = document.querySelectorAll(".inner");
@@ -174,9 +214,8 @@
             btn.onclick = (event) => {
                 console.log(event.target);
                 let str = event.target.value;
-                let matchs = str.match(/(?<=Tags\:)([a-zA-Z0-9_\s]*)\s+(?=User)/g)[0];
+                let matchs = str.match(/(?<=Tags\:)([a-zA-Z0-9_\s\(\)]*)\s+(?=User)/g)[0];
                 str = matchs.replace(/\s+/g, ", ");
-                console.log("str :>> ", str);
                 str = "masterpiece, best quality, nipples" + str;
                 _copy(str);
             };
@@ -229,7 +268,7 @@
         console.log("Copied the text: " + copyText.value);
         document.body.removeChild(myInput);
     };
-    if (window.location.href.includes("danbooru")) danbooru();
+    if (window.location.href.includes("danbooru.donmai.us")) danbooru();
     if (window.location.href.includes("gelbooru.com")) gelbooru();
     if (window.location.href.includes("konachan")) konachan();
     if (window.location.href.includes("lolibooru")) konachan();
